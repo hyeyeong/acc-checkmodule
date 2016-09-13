@@ -15,7 +15,7 @@ public class EpubAccessibilityValidator
 	public void validate(String path)
 	{
 		this.filePath = path;
-		switch (getFileExtension())
+		/*switch (getFileExtension())
 		{
 			case XHTML:
 				checkXHTML();
@@ -28,7 +28,8 @@ public class EpubAccessibilityValidator
 			case SVG:
 				checkSVG();
 			break;
-		}
+		}*/
+		checkXHTML();
 	}
 	
 	private void checkXHTML()
@@ -51,7 +52,7 @@ public class EpubAccessibilityValidator
 	private int getFileExtension()
 	{
 		String[] splitted = filePath.split(".");
-		String ext = splitted[(splitted.length - 1)];
+		String ext = splitted[1];
 		
 		if (ext.equals("xhtml"))
 			return XHTML;
