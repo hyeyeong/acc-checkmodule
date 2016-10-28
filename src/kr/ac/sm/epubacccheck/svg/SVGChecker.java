@@ -1,6 +1,7 @@
 package kr.ac.sm.epubacccheck.svg;
 
 import kr.ac.sm.epubacccheck.util.FileChecker;
+import kr.ac.sm.epubacccheck.util.XMLDocParser;
 
 public class SVGChecker implements FileChecker
 {
@@ -8,13 +9,8 @@ public class SVGChecker implements FileChecker
 	public void check(String filePath)
 	{
 		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getStatus()
-	{
-		// TODO Auto-generated method stub
-		return 0;
+		SVGAccessibilityHandler svgHandler = new SVGAccessibilityHandler();
+		XMLDocParser parser = new XMLDocParser();
+		parser.parse(filePath, svgHandler);
 	}
 }

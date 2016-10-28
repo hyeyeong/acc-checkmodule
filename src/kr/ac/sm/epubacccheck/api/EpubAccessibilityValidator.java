@@ -1,21 +1,54 @@
 package kr.ac.sm.epubacccheck.api;
 
-import kr.ac.sm.epubacccheck.svg.SVGAccessibilityHandler;
-import kr.ac.sm.epubacccheck.xml.HTMLChecker;
-import kr.ac.sm.epubacccheck.xml.XMLDocParser;
+import java.util.ArrayList;
+
+import kr.ac.sm.epubacccheck.css.CSSChecker;
+import kr.ac.sm.epubacccheck.epub.EpubFile;
+import kr.ac.sm.epubacccheck.epub.NavChecker;
+import kr.ac.sm.epubacccheck.epub.OPFChecker;
+import kr.ac.sm.epubacccheck.svg.SVGChecker;
+import kr.ac.sm.epubacccheck.util.FileExt;
+import kr.ac.sm.epubacccheck.xhtml.HTMLChecker;
 
 public class EpubAccessibilityValidator 
 {
-	private final int XHTML = 100;
-	private final int CSS = 200;
-	private final int SVG = 300;
-	
 	private String filePath;
 
 	public void validate(String path)
 	{
-		this.filePath = path;
-		/*switch (getFileExtension())
+		filePath = path;
+		FileExt fileExtension = getFileExtension(path);
+		
+		if (fileExtension == FileExt.OPF)
+		{
+			runOPFCheck();
+		}
+		else
+		{
+			runCheck(fileExtension);
+		}
+	}
+	
+	private void runOPFCheck()
+	{
+		OPFChecker opfChecker = new OPFChecker();
+		ArrayList<EpubFile> epubFileList = new ArrayList<EpubFile>();
+		
+		opfChecker.check(filePath);
+		epubFileList = opfChecker.getEpubFileList();
+		
+		for (int i = 0; i < epubFileList.size(); i++)
+		{
+			EpubFile file = epubFileList.get(i);
+			filePath = file.getFilePath();
+			System.out.println("----- (validator) path: " + filePath + " - ext: " + file.getFileExt().toString());
+			runCheck(file.getFileExt());
+		}
+	}
+	
+	private void runCheck(FileExt fileExt)
+	{
+		switch (fileExt)
 		{
 			case XHTML:
 				checkXHTML();
@@ -28,8 +61,14 @@ public class EpubAccessibilityValidator
 			case SVG:
 				checkSVG();
 			break;
-		}*/
-		checkXHTML();
+			
+			case NAV:
+				checkNav();
+			break;
+			
+			default:
+			break;
+		}
 	}
 	
 	private void checkXHTML()
@@ -39,28 +78,35 @@ public class EpubAccessibilityValidator
 	
 	private void checkCSS()
 	{
-		;
+		new CSSChecker().check(filePath);
 	}
 	
 	private void checkSVG()
 	{
-		SVGAccessibilityHandler svgHandler = new SVGAccessibilityHandler();
-		XMLDocParser parser = new XMLDocParser();
-		parser.parse(filePath, svgHandler);
+		new SVGChecker().check(filePath);
 	}
 	
-	private int getFileExtension()
+	private void checkNav()
 	{
-		String[] splitted = filePath.split(".");
-		String ext = splitted[1];
-		
+		new NavChecker().check(filePath);
+	}
+	
+	private FileExt getFileExtension(String path)
+	{
+		System.out.println(path);
+		String[] splitted = path.split("\\.");
+		String ext = splitted[splitted.length - 1];
+		System.out.println(splitted[splitted.length - 1]);
+
 		if (ext.equals("xhtml"))
-			return XHTML;
+			return FileExt.XHTML;
 		else if (ext.equals("css"))
-			return CSS;
+			return FileExt.CSS;
 		else if (ext.equals("svg"))
-			return SVG;
+			return FileExt.SVG;
+		else if (ext.equals("opf"))
+			return FileExt.OPF;
 		else
-			return 0;
+			return FileExt.NONE;
 	}
 }

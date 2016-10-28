@@ -1,0 +1,31 @@
+package kr.ac.sm.epubacccheck.css;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import org.idpf.epubcheck.util.css.CssParser;
+import org.idpf.epubcheck.util.css.CssSource;
+
+import kr.ac.sm.epubacccheck.util.FileChecker;
+
+public class CSSChecker implements FileChecker
+{
+
+	@Override
+	public void check(String filePath)
+	{
+		// TODO Auto-generated method stub
+        try {
+    		InputStream inputStream = new FileInputStream(filePath);
+            CssSource source = new CssSource(filePath, inputStream);
+            CssParser parser = new CssParser();
+            CSSAccessibilityHandler handler = new CSSAccessibilityHandler();
+            //handler.setPath(filePath);
+            
+			parser.parse(source, handler, handler);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

@@ -1,0 +1,15 @@
+nav#landmarks {
+    display:none;
+    cursor:pointer;
+    overflow: hidden;
+}
+
+nav#page-list {
+    display:none;
+}
+
+ol {
+    list-style-type: none;
+}
+
+
