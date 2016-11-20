@@ -13,6 +13,9 @@ public class NavChecker implements FileChecker
 	{
 		// TODO Auto-generated method stub
 		handler = new NavCheckHandler();
+		handler.setFilePath(filePath);
+		handler.setReport(report);
+
 		XMLDocParser parser = new XMLDocParser();
 		parser.parse(filePath, handler);
 	}

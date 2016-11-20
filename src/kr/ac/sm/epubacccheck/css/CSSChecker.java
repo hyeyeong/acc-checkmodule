@@ -16,12 +16,14 @@ public class CSSChecker implements FileChecker
 	public void check(String filePath, Report report)
 	{
 		// TODO Auto-generated method stub
-        try {
+        try
+        {
     		InputStream inputStream = new FileInputStream(filePath);
             CssSource source = new CssSource(filePath, inputStream);
             CssParser parser = new CssParser();
             CSSAccessibilityHandler handler = new CSSAccessibilityHandler();
-            //handler.setPath(filePath);
+            handler.setFilePath(filePath);
+    		handler.setReport(report);
             
 			parser.parse(source, handler, handler);
 		} catch (Exception e) {

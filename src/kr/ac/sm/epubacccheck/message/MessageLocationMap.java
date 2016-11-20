@@ -2,23 +2,23 @@ package kr.ac.sm.epubacccheck.message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import kr.ac.sm.epubacccheck.report.EPUBLocation;
 
 public class MessageLocationMap
 {
-	static HashMap<MessageId, List<EPUBLocation>> locations = new HashMap<MessageId, List<EPUBLocation>>();
+	static HashMap<MessageId, ArrayList<EPUBLocation>> locations = new HashMap<MessageId, ArrayList<EPUBLocation>>();
 
 	public static void initEPUBLocationList()
 	{
-		locations.put(MessageId.TOC_001, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_001_W, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_002, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_003, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_004, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_005, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.TOC_006, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_001, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_001_W, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_002_1, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_002_2, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_003, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_004, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_005, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NAV_006, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.EPUBTYPE_001, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.EPUBTYPE_002, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.OPF_001, new ArrayList<EPUBLocation>());
@@ -41,10 +41,12 @@ public class MessageLocationMap
 		locations.put(MessageId.IMG_003, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.MEDIA_001, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.MEDIA_002, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.MEDIA_001_W, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.MEDIA_002_W, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.JSARIA_001, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.JSARIA_002, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.JSARIA_001, new ArrayList<EPUBLocation>());
-		locations.put(MessageId.REF_001, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.JSARIA_003, new ArrayList<EPUBLocation>());
+		locations.put(MessageId.NOTE_001, new ArrayList<EPUBLocation>());
 		
 		locations.put(MessageId.CSS_001, new ArrayList<EPUBLocation>());
 		locations.put(MessageId.CSS_002, new ArrayList<EPUBLocation>());
@@ -70,7 +72,7 @@ public class MessageLocationMap
 		return locations.get(messageId).get(index);
 	}
 	
-	public static List<EPUBLocation> getAllEPUBLocation(MessageId messageId)
+	public static ArrayList<EPUBLocation> getEPUBLocationList(MessageId messageId)
 	{
 		return locations.get(messageId);
 	}
@@ -92,6 +94,13 @@ public class MessageLocationMap
 		{
 			System.out.println("ADDING NEW MESSAGE SUCCESS");
 			System.out.println("line from list: " + locations.get(messageId).get(0).getLineNumber());
+			System.out.println("message id: " + messageId.toString());
 		}
+	}
+	
+	public static int getCountOfLocationList(MessageId messageId)
+	{
+		System.out.println(messageId.toString() + " list count: " + locations.get(messageId).size());
+		return locations.get(messageId).size();
 	}
 }

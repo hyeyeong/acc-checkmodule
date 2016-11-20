@@ -2,14 +2,15 @@ package kr.ac.sm.epubacccheck.message;
 
 public enum MessageId
 {
-	// MESSAGE IDs FOR OPF / EPUBTYPE / TOC
-	TOC_001			("TOC-001"),
-	TOC_001_W		("TOC-001"), // ID for warning
-	TOC_002			("TOC-002"),
-	TOC_003			("TOC-003"),
-	TOC_004			("TOC-004"),
-	TOC_005			("TOC-005"),
-	TOC_006			("TOC-006"),
+	// MESSAGE IDs FOR OPF / EPUBTYPE / NAV
+	NAV_001			("NAV-001"),
+	NAV_001_W		("NAV-001"), // ID for warning
+	NAV_002_1		("NAV-002"),
+	NAV_002_2		("NAV-002"),
+	NAV_003			("NAV-003"),
+	NAV_004			("NAV-004"),
+	NAV_005			("NAV-005"),
+	NAV_006			("NAV-006"),
 	EPUBTYPE_001	("EPUBTYPE-001"),
 	EPUBTYPE_002	("EPUBTYPE-002"),
 	OPF_001			("OPF-001"),
@@ -32,11 +33,13 @@ public enum MessageId
 	IMG_002			("IMG-002"),
 	IMG_003			("IMG-003"),
 	MEDIA_001		("MEDIA-001"),
+	MEDIA_001_W		("MEDIA-001"),
 	MEDIA_002		("MEDIA-002"),
+	MEDIA_002_W		("MEDIA-002"),
 	JSARIA_001		("JSARIA-001"),
 	JSARIA_002		("JSARIA-002"),
 	JSARIA_003		("JSARIA-003"),
-	REF_001			("REF-001"),
+	NOTE_001			("NOTE-001"),
 	
 	// MESSAGE IDs FOR CSS
 	CSS_001			("CSS-001"),
@@ -56,7 +59,7 @@ public enum MessageId
 	SVG_001			("SVG-001"),
 	SVG_002			("SVG-002"),
 	SMIL_001		("SMIL-001"),
-	SMIL_002		("SMIL-001");
+	SMIL_002		("SMIL-002");
 
 	private final String messageId;
 	

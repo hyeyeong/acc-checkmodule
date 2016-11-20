@@ -4,14 +4,15 @@ import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.util.FileChecker;
 import kr.ac.sm.epubacccheck.util.XMLDocParser;
 
-public class HTMLChecker implements FileChecker
+public class XHTMLChecker implements FileChecker
 {
 	@Override
 	public void check(String filePath, Report report)
 	{
 		// TODO Auto-generated method stub
-		HTMLAccessibilityHandler handler = new HTMLAccessibilityHandler();
+		XHTMLAccessibilityHandler handler = new XHTMLAccessibilityHandler();
 		handler.setReport(report);
+		handler.setFilePath(filePath);
 		XMLDocParser parser = new XMLDocParser();
 		parser.parse(filePath, handler);
 	}

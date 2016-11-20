@@ -7,6 +7,9 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import kr.ac.sm.epubacccheck.message.MessageId;
+import kr.ac.sm.epubacccheck.report.EPUBLocation;
+import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.util.EpubInfo;
 import kr.ac.sm.epubacccheck.util.FileExt;
 
@@ -20,6 +23,10 @@ public class OPFCheckHandler extends DefaultHandler
 	private boolean hasSpine = false;
 	
 	private int xhtmlFileCount = 0;
+	private int metadataLine = 0;
+	
+	private String filePath;
+	private Report report;
 	
 	public OPFCheckHandler()
 	{
@@ -31,6 +38,16 @@ public class OPFCheckHandler extends DefaultHandler
         this.locator = locator;
     }
 	
+	public void setFilePath(String path)
+	{
+		this.filePath = path;
+	}
+	
+	public void setReport(Report report)
+	{
+		this.report = report;
+	}
+	
 	public void startDocument()
 	{
 		System.out.println("document start");
@@ -40,6 +57,11 @@ public class OPFCheckHandler extends DefaultHandler
 	{
 		String value = null;
 		epubFile = new EpubFile();
+		
+		if (qName.equals("metadata"))
+		{
+			metadataLine = locator.getLineNumber();
+		}
 
 		if (qName.equals("item"))
 		{
@@ -86,7 +108,7 @@ public class OPFCheckHandler extends DefaultHandler
 			hasSpine = true;
 			if (attributes.getValue("toc") == null || attributes.getValue("toc").equals(""))
 			{
-				System.out.println("error: no toc attribute - " + locator.getLineNumber());
+				report.addMessage(MessageId.OPF_002_W, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 	}
@@ -96,13 +118,13 @@ public class OPFCheckHandler extends DefaultHandler
 		// OPF-001
 		if (!hasDcLanguage)
 		{
-			System.out.println("error: no dc:language - " + locator.getLineNumber());
+			report.addMessage(MessageId.OPF_001, new EPUBLocation(filePath, metadataLine, 1));
 		}
 		
 		// OPF-002
 		if (!hasSpine)
 		{
-			System.out.println("error: no spine - " + locator.getLineNumber());
+			report.addMessage(MessageId.OPF_002_W, new EPUBLocation(filePath, 1, 1));
 		}
 		
 		EpubInfo.epubFileCount = xhtmlFileCount;

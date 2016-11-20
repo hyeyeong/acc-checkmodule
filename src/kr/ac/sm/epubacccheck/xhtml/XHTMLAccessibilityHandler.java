@@ -9,7 +9,7 @@ import kr.ac.sm.epubacccheck.message.MessageId;
 import kr.ac.sm.epubacccheck.report.EPUBLocation;
 import kr.ac.sm.epubacccheck.report.Report;
 
-public class HTMLAccessibilityHandler extends DefaultHandler 
+public class XHTMLAccessibilityHandler extends DefaultHandler 
 {
 	private Locator locator;
 	
@@ -27,6 +27,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 	private int startingElementLineNumber = 0;
 	
 	private Report report;
+	private String filePath;
 
 	public void setDocumentLocator(Locator locator)
 	{
@@ -37,6 +38,11 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 	{
 		this.report = report;
 	}
+	
+	public void setFilePath(String path)
+	{
+		this.filePath = path;
+	}
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
@@ -45,13 +51,12 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (attributes.getValue("xml:lang") == null && attributes.getValue("lang") == null)
 			{
-				System.out.println("error: no lang & xml:lang attribute");
-				System.out.println("line: " + locator.getLineNumber());
+				report.addMessage(MessageId.LANG_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 			
 			if (attributes.getValue("xmlns:epub") == null)
 			{
-				System.out.println("error: no epub namespace");
+				report.addMessage(MessageId.EPUBTYPE_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		
@@ -60,9 +65,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (attributes.getValue("xml:lang") == null && attributes.getValue("lang") == null)
 			{
-				System.out.println("warning: no lang & xml:lang attribute");
-				System.out.println("line: " + locator.getLineNumber());
-				report.addMessage(MessageId.LANG_002, new EPUBLocation("filepath", locator.getLineNumber(), locator.getColumnNumber()));
+				report.addMessage(MessageId.LANG_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		
@@ -74,7 +77,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 
 			if (attributes.getValue("epub:type") == null || attributes.getValue("aria-label") == null || attributes.getValue("title") == null)
 			{
-				System.out.println("error: no section title");
+				report.addMessage(MessageId.TITLE_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 
@@ -91,14 +94,20 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (attributes.getValue("title") == null)
 			{
-				System.out.println("error: no title attribute");
+				report.addMessage(MessageId.LINK_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		
-		// STYLE-001, STYLE-002
-		if (qName.equals("i") || qName.equals("b"))
+		// STYLE-001
+		if (qName.equals("i"))
 		{
-			System.out.println("error: can not use i tag");
+			report.addMessage(MessageId.STYLE_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
+		}
+		
+		// STYLE-002
+		if (qName.equals("b"))
+		{
+			report.addMessage(MessageId.STYLE_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 		}
 		
 		// STYLE-003 noise background: css -> if selector is div, span, body, p ... etc, background-image is error
@@ -122,7 +131,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 				thCountInTable++;
 				if (attributes.getValue("scope") == null || attributes.getValue("scope").equals(""))
 				{
-					System.out.println("error: no scope attribute");
+					report.addMessage(MessageId.TABLE_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 				}
 			}
 		}
@@ -143,12 +152,12 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 			}
 		}
 		
-		// IMG-002, IMG-003
+		// IMG-002
 		if (qName.equals("area"))
 		{
 			if (attributes.getValue("alt") == null || attributes.getValue("alt").isEmpty() || attributes.getValue("alt").equals(""))
 			{
-				System.out.println("error: no alt attribute");
+				report.addMessage(MessageId.IMG_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		
@@ -157,27 +166,42 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (attributes.getValue("alt") == null || attributes.getValue("alt").isEmpty() || attributes.getValue("alt").equals(""))
 			{
-				System.out.println("error: no alt attribute");
+				report.addMessage(MessageId.IMG_003, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 			
 			if (attributes.getValue("aria-role") == null || attributes.getValue("aria-role").isEmpty() || attributes.getValue("aria-role").equals(""))
 			{
-				System.out.println("warning: recommend to use aria role attribute");
+				report.addMessage(MessageId.JSARIA_003, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		
-		// MEDIA-001, MEDIA-002
-		if (qName.equals("audio") || qName.equals("video"))
+		// MEDIA-001
+		if (qName.equals("audio"))
 		{
 			if (attributes.getValue("controls") == null)
 			{
-				System.out.println(("error: no controls attribute"));
+				report.addMessage(MessageId.MEDIA_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 			else
 			{
 				if (attributes.getValue("controls").isEmpty() || !attributes.equals("controls"))
 				{
-					System.out.println("error: controls attribute has wrong value");
+					report.addMessage(MessageId.MEDIA_001_W, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));				}
+			}
+		}
+
+		// MEDIA-002
+		if (qName.equals("video"))
+		{
+			if (attributes.getValue("controls") == null)
+			{
+				report.addMessage(MessageId.MEDIA_002, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
+			}
+			else
+			{
+				if (attributes.getValue("controls").isEmpty() || !attributes.equals("controls"))
+				{
+					report.addMessage(MessageId.MEDIA_002_W, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 				}
 			}
 		}
@@ -188,7 +212,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 			if (attributes.getValue("aria-hidden").equals("true") || attributes.getValue("hidden").equals("hidden"))
 			{
 				// warning
-				System.out.println("warning: hidden content");	
+				report.addMessage(MessageId.JSARIA_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 
@@ -197,14 +221,13 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		// NOTE-001 (with CSS)
 		if (qName.equals("sup"))
 		{
-			System.out.println("error: using epub:type for note");
+			report.addMessage(MessageId.NOTE_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 		}
 		
 		// CSS-001
 		if (attributes.getValue("style") != null)
 		{
-			System.out.println("error: can not use style attribute");
-			System.out.println("line: " + locator.getLineNumber());
+			report.addMessage(MessageId.CSS_001, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 		}
 	}
 	
@@ -214,7 +237,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (headingCountInSection > 1)
 			{
-				System.out.println("error: heading is too much! line: " + startingElementLineNumber);
+				report.addMessage(MessageId.TITLE_001, new EPUBLocation(filePath, startingElementLineNumber, 1));
 			}
 			
 			isSection = false;
@@ -226,12 +249,12 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (thCountInTable == 0)
 			{
-				System.out.println("error: no th tag in table / line: " + startingElementLineNumber);
+				report.addMessage(MessageId.TABLE_001, new EPUBLocation(filePath, startingElementLineNumber, 1));
 			}
 			
 			if (!hasCaptionInTable)
 			{
-				System.out.println("error: no caption tag in table / line: " + startingElementLineNumber);
+				report.addMessage(MessageId.TABLE_003, new EPUBLocation(filePath, startingElementLineNumber, 1));
 			}
 			
 			isTable = false;
@@ -243,7 +266,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 		{
 			if (!hasFigCaptionInFigure || figCaptionCountInFigure > 1)
 			{
-				System.out.println("error: figcaption tag / line: " + startingElementLineNumber);
+				report.addMessage(MessageId.IMG_001, new EPUBLocation(filePath, startingElementLineNumber, 1));
 			}
 		}
 	}

@@ -10,15 +10,31 @@ import org.idpf.epubcheck.util.css.CssGrammar.CssAtRule;
 import org.idpf.epubcheck.util.css.CssGrammar.CssDeclaration;
 import org.idpf.epubcheck.util.css.CssGrammar.CssSelector;
 
+import kr.ac.sm.epubacccheck.message.MessageId;
+import kr.ac.sm.epubacccheck.report.EPUBLocation;
+import kr.ac.sm.epubacccheck.report.Report;
+
 public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandler
 {
 	private boolean hasVisibility = false;
+	private String filePath;
+	private Report report;
 
 	@Override
 	public void error(CssException e) throws CssException
 	{
 		// TODO Auto-generated method stub
 		e.printStackTrace();
+	}
+	
+	public void setReport(Report report)
+	{
+		this.report = report;
+	}
+	
+	public void setFilePath(String path)
+	{
+		this.filePath = path;
 	}
 
 	@Override
@@ -60,7 +76,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 		// CSS-002
 		if (cssAttribute.equals("cursor"))
 		{
-			System.out.println("line: " + declaration.getLocation().getLine());
+			report.addMessage(MessageId.CSS_002, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 		}
 		
 		// CSS-003
@@ -70,7 +86,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || "hidden".equals(cssc.toCssString()))
 				{
-					System.out.println("error: overflow hidden - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_003, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}
@@ -82,7 +98,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || "0px".equals(cssc.toCssString()))
 				{
-					System.out.println("error: width 0px - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_004, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}
@@ -94,7 +110,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("") || cssc.toCssString().equals("url('')") || cssc.toCssString().equals("url(\"\")") || cssc.toCssString().equals("none"))
 				{
-					System.out.println("error: background image - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_005, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}
@@ -106,7 +122,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().contains("pt") || cssc.toCssString().contains("px") || cssc.toCssString().contains("x-small"))
 				{
-					System.out.println("error: font size - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_006, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}
@@ -118,7 +134,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("justify"))
 				{
-					System.out.println("error: text align - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_007, new EPUBLocation(filePath, declaration.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}
@@ -142,7 +158,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("hidden") || cssc.toCssString().equals("none"))
 				{
-					System.out.println("error: visibility - " + cssc.getLocation().getLine());
+					report.addMessage(MessageId.CSS_011, new EPUBLocation(filePath, cssc.getLocation().getLine(), declaration.getLocation().getColumn()));
 				}
 			}
 		}

@@ -8,13 +8,13 @@ public class MessageSeverityMap
 	
 	public static void initMessageSeverities()
 	{
-		severities.put(MessageId.TOC_001, MessageSeverity.ERROR);
-		severities.put(MessageId.TOC_001_W, MessageSeverity.WARNING);
-		severities.put(MessageId.TOC_002, MessageSeverity.WARNING);
-		severities.put(MessageId.TOC_003, MessageSeverity.WARNING);
-		severities.put(MessageId.TOC_004, MessageSeverity.WARNING);
-		severities.put(MessageId.TOC_005, MessageSeverity.WARNING);
-		severities.put(MessageId.TOC_006, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_001, MessageSeverity.ERROR);
+		severities.put(MessageId.NAV_001_W, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_002_1, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_003, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_004, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_005, MessageSeverity.WARNING);
+		severities.put(MessageId.NAV_006, MessageSeverity.WARNING);
 		severities.put(MessageId.EPUBTYPE_001, MessageSeverity.WARNING);
 		severities.put(MessageId.EPUBTYPE_002, MessageSeverity.ERROR);
 		severities.put(MessageId.OPF_001, MessageSeverity.ERROR);
@@ -37,10 +37,12 @@ public class MessageSeverityMap
 		severities.put(MessageId.IMG_003, MessageSeverity.ERROR);
 		severities.put(MessageId.MEDIA_001, MessageSeverity.WARNING);
 		severities.put(MessageId.MEDIA_002, MessageSeverity.WARNING);
+		severities.put(MessageId.MEDIA_001_W, MessageSeverity.WARNING);
+		severities.put(MessageId.MEDIA_002_W, MessageSeverity.WARNING);
 		severities.put(MessageId.JSARIA_001, MessageSeverity.ERROR);
 		severities.put(MessageId.JSARIA_002, MessageSeverity.ERROR);
-		severities.put(MessageId.JSARIA_001, MessageSeverity.WARNING);
-		severities.put(MessageId.REF_001, MessageSeverity.ERROR);
+		severities.put(MessageId.JSARIA_003, MessageSeverity.WARNING);
+		severities.put(MessageId.NOTE_001, MessageSeverity.ERROR);
 		
 		severities.put(MessageId.CSS_001, MessageSeverity.ERROR);
 		severities.put(MessageId.CSS_002, MessageSeverity.ERROR);

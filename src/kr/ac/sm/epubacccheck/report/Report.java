@@ -9,16 +9,23 @@ import kr.ac.sm.epubacccheck.message.MessageLocationMap;
 
 public class Report
 {
+	private ReportWriter reportWriter;
 	private String reportPath;
 	
 	public Report()
 	{
 		reportPath = getDate() + ".json";
+		reportWriter = new ReportWriter();
 	}
 
 	public void addMessage(MessageId messageId, EPUBLocation location)
 	{
 		MessageLocationMap.addLocation(messageId, location);
+	}
+	
+	public void createReport()
+	{
+		reportWriter.writeReport(reportPath);
 	}
 
 	public void setReportPath(String reportPath)

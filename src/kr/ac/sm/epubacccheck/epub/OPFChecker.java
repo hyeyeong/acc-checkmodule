@@ -15,6 +15,9 @@ public class OPFChecker implements FileChecker
 	{
 		// TODO Auto-generated method stub
 		handler = new OPFCheckHandler();
+		handler.setFilePath(filePath);
+		handler.setReport(report);
+		
 		XMLDocParser parser = new XMLDocParser();
 		parser.parse(filePath, handler);
 	}

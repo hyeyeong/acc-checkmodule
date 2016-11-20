@@ -11,7 +11,7 @@ import kr.ac.sm.epubacccheck.message.MessageSeverityMap;
 import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.svg.SVGChecker;
 import kr.ac.sm.epubacccheck.util.FileExt;
-import kr.ac.sm.epubacccheck.xhtml.HTMLChecker;
+import kr.ac.sm.epubacccheck.xhtml.XHTMLChecker;
 
 public class EpubAccessibilityValidator 
 {
@@ -39,6 +39,8 @@ public class EpubAccessibilityValidator
 		{
 			runCheck(fileExtension);
 		}
+
+		report.createReport();
 	}
 
 	public void validate(String path, String reportPath)
@@ -92,7 +94,7 @@ public class EpubAccessibilityValidator
 	
 	private void checkXHTML()
 	{
-		new HTMLChecker().check(filePath, report);
+		new XHTMLChecker().check(filePath, report);
 	}
 	
 	private void checkCSS()

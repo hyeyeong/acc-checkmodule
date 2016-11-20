@@ -5,6 +5,9 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import kr.ac.sm.epubacccheck.message.MessageId;
+import kr.ac.sm.epubacccheck.report.EPUBLocation;
+import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.util.EpubInfo;
 
 public class NavCheckHandler extends DefaultHandler
@@ -14,6 +17,7 @@ public class NavCheckHandler extends DefaultHandler
 	private boolean isNav = false;
 	private boolean isLiInNav = false;
 	
+	private boolean hasNav = false;
 	private boolean hasATag = false;
 	private boolean hasSpanTag = false;
 	private boolean hasLoI = false;
@@ -24,16 +28,30 @@ public class NavCheckHandler extends DefaultHandler
 	private int liCountInNav = 0;
 	private int navLineNumber = 0;
 	
+	private Report report;
+	private String filePath;
+	
 	public void setDocumentLocator(Locator locator)
 	{
         this.locator = locator;
     }
+	
+	public void setFilePath(String path)
+	{
+		this.filePath = path;
+	}
+	
+	public void setReport(Report report)
+	{
+		this.report = report;
+	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
 		// NAV-001
 		if (qName.equals("nav") && attributes.getValue("epub:type").equals("toc"))
 		{
+			hasNav = true;
 			isNav = true;
 			navLineNumber = locator.getLineNumber();
 		}
@@ -45,7 +63,6 @@ public class NavCheckHandler extends DefaultHandler
 			{
 				isLiInNav = true;
 				liCountInNav++;
-				System.out.println("nav: li count > " + liCountInNav);
 			}
 			
 			if (isLiInNav)
@@ -57,7 +74,7 @@ public class NavCheckHandler extends DefaultHandler
 				if (qName.equals("span"))
 				{
 					hasSpanTag = true;
-					System.out.println("warning: use a tag - " + locator.getLineNumber());
+					report.addMessage(MessageId.NAV_002_2, new EPUBLocation(filePath, locator.getLineNumber(), locator.getColumnNumber()));
 				}
 			}
 		}
@@ -104,34 +121,39 @@ public class NavCheckHandler extends DefaultHandler
 	{
 		System.out.println("nav: file count > " + EpubInfo.epubFileCount);
 		
+		if (!hasNav)
+		{
+			report.addMessage(MessageId.NAV_001, new EPUBLocation(filePath, 1, 1));
+		}
+		
 		if (liCountInNav != EpubInfo.epubFileCount)
 		{
-			System.out.println("error: uncompleted index - " + navLineNumber);
+			report.addMessage(MessageId.NAV_001_W, new EPUBLocation(filePath, navLineNumber, 1));
 		}
 		
 		if (!hasATag && !hasSpanTag)
 		{
-			System.out.println("error: need 'a' tag or 'span' tag in li - " + navLineNumber);
+			report.addMessage(MessageId.NAV_002_1, new EPUBLocation(filePath, navLineNumber, 1));
 		}
 		
 		if (!hasLoI)
 		{
-			System.out.println("warning: need list of image");
+			report.addMessage(MessageId.NAV_003, new EPUBLocation(filePath, 1, 1));
 		}
 		
 		if (!hasLoT)
 		{
-			System.out.println("warning: need list of table");
+			report.addMessage(MessageId.NAV_004, new EPUBLocation(filePath, 1, 1));
 		}
 		
 		if (!hasLoV)
 		{
-			System.out.println("warning: need list of video");
+			report.addMessage(MessageId.NAV_005, new EPUBLocation(filePath, 1, 1));
 		}
 		
 		if (!hasLoA)
 		{
-			System.out.println("warning: need list of audio");
+			report.addMessage(MessageId.NAV_006, new EPUBLocation(filePath, 1, 1));
 		}
 	}
 }
