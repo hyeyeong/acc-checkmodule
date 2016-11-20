@@ -6,7 +6,7 @@ public class EpubAccessibilityCheck
 {
 	public static void main(String[] args)
 	{
-		String filePath = "content.opf";
+		String filePath = "Text/chapter3.xhtml";
 		EpubAccessibilityValidator validator = new EpubAccessibilityValidator();
 		validator.validate(filePath);
 	}

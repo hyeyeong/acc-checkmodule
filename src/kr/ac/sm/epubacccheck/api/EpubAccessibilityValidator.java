@@ -19,11 +19,12 @@ public class EpubAccessibilityValidator
 		filePath = path;
 		FileExt fileExtension = getFileExtension(path);
 		
+		// input - OPF: validating all files
 		if (fileExtension == FileExt.OPF)
 		{
 			runOPFCheck();
 		}
-		else
+		else // input - unit file
 		{
 			runCheck(fileExtension);
 		}
@@ -41,11 +42,13 @@ public class EpubAccessibilityValidator
 		{
 			EpubFile file = epubFileList.get(i);
 			filePath = file.getFilePath();
-			System.out.println("----- (validator) path: " + filePath + " - ext: " + file.getFileExt().toString());
+			//System.out.println("----- (validator) path: " + filePath + " - ext: " + file.getFileExt().toString());
+			
 			runCheck(file.getFileExt());
 		}
 	}
 	
+	// execute validation
 	private void runCheck(FileExt fileExt)
 	{
 		switch (fileExt)

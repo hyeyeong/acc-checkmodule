@@ -70,7 +70,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || "hidden".equals(cssc.toCssString()))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: overflow hidden - " + cssc.getLocation().getLine());
 				}
 			}
 		}
@@ -82,7 +82,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || "0px".equals(cssc.toCssString()))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: width 0px - " + cssc.getLocation().getLine());
 				}
 			}
 		}
@@ -94,7 +94,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("") || cssc.toCssString().equals("url('')") || cssc.toCssString().equals("url(\"\")") || cssc.toCssString().equals("none"))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: background image - " + cssc.getLocation().getLine());
 				}
 			}
 		}
@@ -106,7 +106,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().contains("pt") || cssc.toCssString().contains("px") || cssc.toCssString().contains("x-small"))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: font size - " + cssc.getLocation().getLine());
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("justify"))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: text align - " + cssc.getLocation().getLine());
 				}
 			}
 		}
@@ -129,6 +129,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 		// CSS-010 background-color contrast - STYLE-003
 		if (cssAttribute.equals("background-color"))
 		{
+			// WCAG20 contrast ratio
 			;
 		}
 		
@@ -141,7 +142,7 @@ public class CSSAccessibilityHandler implements CssContentHandler, CssErrorHandl
 			{
 				if (cssc.toCssString() == null || cssc.toCssString().equals("hidden") || cssc.toCssString().equals("none"))
 				{
-					System.out.println(cssc.getLocation().getLine());
+					System.out.println("error: visibility - " + cssc.getLocation().getLine());
 				}
 			}
 		}

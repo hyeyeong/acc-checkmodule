@@ -10,6 +10,7 @@
   </metadata>
   <manifest>
     <item id="tocncx" href="toc.ncx" media-type="application/xhtml+xml"/>
+    <item id="titlepage" href="Text/titlepage.xhtml" media-type="application/xhtml+xml"/>
     <item id="chapter1" href="Text/chapter1.xhtml" media-type="application/xhtml+xml"/>
     <item id="chapter2" href="Text/chapter2.xhtml" media-type="application/xhtml+xml"/>
     <item id="chapter3" href="Text/chapter3.xhtml" media-type="application/xhtml+xml"/>
