@@ -2,6 +2,7 @@ package kr.ac.sm.epubacccheck.epub;
 
 import java.util.ArrayList;
 
+import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.util.FileChecker;
 import kr.ac.sm.epubacccheck.util.XMLDocParser;
 
@@ -10,7 +11,7 @@ public class OPFChecker implements FileChecker
 	private OPFCheckHandler handler;
 
 	@Override
-	public void check(String filePath)
+	public void check(String filePath, Report report)
 	{
 		// TODO Auto-generated method stub
 		handler = new OPFCheckHandler();

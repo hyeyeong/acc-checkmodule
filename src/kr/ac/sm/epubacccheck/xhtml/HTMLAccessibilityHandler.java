@@ -5,6 +5,10 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import kr.ac.sm.epubacccheck.message.MessageId;
+import kr.ac.sm.epubacccheck.report.EPUBLocation;
+import kr.ac.sm.epubacccheck.report.Report;
+
 public class HTMLAccessibilityHandler extends DefaultHandler 
 {
 	private Locator locator;
@@ -21,12 +25,18 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 	private int figCaptionCountInFigure = 0;
 	
 	private int startingElementLineNumber = 0;
-
 	
+	private Report report;
+
 	public void setDocumentLocator(Locator locator)
 	{
         this.locator = locator;
     }
+	
+	public void setReport(Report report)
+	{
+		this.report = report;
+	}
 
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
 	{
@@ -52,6 +62,7 @@ public class HTMLAccessibilityHandler extends DefaultHandler
 			{
 				System.out.println("warning: no lang & xml:lang attribute");
 				System.out.println("line: " + locator.getLineNumber());
+				report.addMessage(MessageId.LANG_002, new EPUBLocation("filepath", locator.getLineNumber(), locator.getColumnNumber()));
 			}
 		}
 		

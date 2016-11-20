@@ -6,13 +6,14 @@ import java.io.InputStream;
 import org.idpf.epubcheck.util.css.CssParser;
 import org.idpf.epubcheck.util.css.CssSource;
 
+import kr.ac.sm.epubacccheck.report.Report;
 import kr.ac.sm.epubacccheck.util.FileChecker;
 
 public class CSSChecker implements FileChecker
 {
 
 	@Override
-	public void check(String filePath)
+	public void check(String filePath, Report report)
 	{
 		// TODO Auto-generated method stub
         try {
